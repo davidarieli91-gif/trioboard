@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrioBoard — Политика конфиденциальности / Privacy Policy / מדיניות פרטיות</title>
+  <style>
+    :root {
+      --bg: #14171f;
+      --panel: #1b2029;
+      --field: #232b3a;
+      --border: #2a3345;
+      --text: #eef2f9;
+      --sub: #9aa7bd;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --warn-bg: #2d2213;
+      --warn-border: #d97706;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 32px 16px 56px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+    }
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 32px;
+    }
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 22px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 1.55rem;
+      letter-spacing: 0.2px;
+    }
+    .brand p {
+      margin: 4px 0 0;
+      color: var(--sub);
+      font-size: 0.92rem;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+    }
+    .tab-btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--field);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .tab-btn:hover { background: #2c3649; }
+    .tab-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+    section.lang-pane { display: none; }
+    section.lang-pane.active { display: block; }
+    h2 {
+      font-size: 1.15rem;
+      margin: 22px 0 8px;
+      color: #ffffff;
+    }
+    p, li { color: #dbe3f2; font-size: 0.97rem; }
+    ul { padding-inline-start: 22px; margin: 8px 0; }
+    li { margin-bottom: 6px; }
+    code {
+      background: var(--field);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 1px 6px;
+      font-family: Consolas, monospace;
+      font-size: 0.9em;
+    }
+    .notice {
+      background: #172338;
+      border: 1px solid #2b4c8c;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-top: 22px;
+      font-size: 0.93rem;
+    }
+    .notice a, footer a {
+      color: #7ab3ff;
+      text-decoration: none;
+    }
+    .notice a:hover, footer a:hover {
+      text-decoration: underline;
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 14px;
+      color: #7ab3ff;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .back-link:hover { text-decoration: underline; }
+    footer {
+      margin-top: 28px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      color: var(--sub);
+      font-size: 0.86rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back-link" href="index.html">← TrioBoard Home / На главную / לדף הבית</a>
+    <header>
+      <div class="brand">
+        <h1>TrioBoard — Privacy Policy</h1>
+        <p>Последнее обновление / Last updated / עדכון אחרון: 2026-11-24</p>
+      </div>
+      <div class="tabs" role="tablist">
+        <button class="tab-btn active" data-lang="ru" onclick="setLang('ru')">Русский</button>
+        <button class="tab-btn" data-lang="en" onclick="setLang('en')">English</button>
+        <button class="tab-btn" data-lang="he" onclick="setLang('he')">עברית</button>
+      </div>
+    </header>
+
+    <!-- РУССКАЯ ВЕРСИЯ -->
+    <section id="pane-ru" class="lang-pane active" lang="ru" dir="ltr">
+      <h2>1. Отсутствие скрытой телеметрии и локальное хранение</h2>
+      <p>TrioBoard работает по принципу «приватность прежде всего». Приложение не собирает аналитику, не отслеживает нажатия клавиш, не строит рекламные профили и не передаёт данные разработчикам.</p>
+      <ul>
+        <li>В версии из Microsoft Store (MSIX) и при установке в системную папку настройки, словарь, автотекст, история буфера, пользовательские API-ключи и скачанные модели хранятся исключительно локально в профиле пользователя Windows: <code>%LOCALAPPDATA%\TrioBoard\data</code> и <code>%LOCALAPPDATA%\TrioBoard\models</code>.</li>
+        <li>В портативном режиме файлы сохраняются локально в папке <code>data</code> рядом с программой.</li>
+      </ul>
+
+      <h2>2. Голосовой ввод (микрофон) и живой предпросмотр</h2>
+      <ul>
+        <li><strong>По умолчанию используется локальный движок Whisper:</strong> звук с микрофона обрабатывается только на вашем компьютере и не передаётся в интернет.</li>
+        <li><strong>Контекст окна и защита паролей:</strong> в Приватном режиме, а также при фокусе на полях паролей и менеджерах паролей, подсказки контекста активного окна автоматически отключаются.</li>
+        <li><strong>Облачные режимы по вашему выбору:</strong> только если вы сами включили «Gemini (API)», «Авто: Gemini → Whisper» или «AI-обработка текста» и указали свой ключ API, аудио или распознанный текст отправляются напрямую в Google Gemini API.</li>
+      </ul>
+
+      <h2>3. Перевод текста и озвучка (TTS)</h2>
+      <ul>
+        <li>Локальное чтение (системные голоса Windows SAPI и опциональный внешний движок Piper CLI) и локальный перевод выполняются полностью на вашем компьютере.</li>
+        <li>При выборе онлайн-сервисов (Google Translate, MyMemory, Microsoft Edge Neural TTS, Google Cloud, Gemini или Grok) выбранный вами текст отправляется напрямую соответствующему провайдеру в момент нажатия кнопки или горячей клавиши.</li>
+      </ul>
+
+      <h2>4. История, Приватный режим и отчёты диагностики</h2>
+      <ul>
+        <li>История буфера хранится локально (по умолчанию до 50 последних записей).</li>
+        <li>При включении <strong>Приватного режима</strong> запись новых фраз в историю приостанавливается, а онлайн-озвучка отключается.</li>
+        <li>Технические журналы (<code>app.log</code>) хранятся только локально; при копировании отчёта поддержки API-ключи и токены автоматически маскируются.</li>
+      </ul>
+
+      <h2>5. Лицензирование и покупки</h2>
+      <p>7-дневный пробный период и дневные счётчики бесплатного режима вычисляются локально на устройстве без регистрации аккаунта. Покупки TrioBoard Pro через Microsoft Store обрабатываются платформой Microsoft в соответствии с Политикой конфиденциальности Microsoft; активация промо-ключом <code>TBPRO-...</code> проверяется локально без обращения к внешним серверам.</p>
+
+      <h2>6. Удаление данных и контакты</h2>
+      <p>Вы можете в любой момент очистить историю в интерфейсе программы или удалить папку <code>%LOCALAPPDATA%\TrioBoard</code>. При удалении приложения через Windows Store локальные данные приложения удаляются средствами Windows.</p>
+      <div class="notice">
+        <strong>Контакт поддержки и вопросы конфиденциальности:</strong><br />
+        Электронная почта разработчика: <a href="mailto:David.arieli91@gmail.com">David.arieli91@gmail.com</a>
+      </div>
+    </section>
+
+    <!-- ENGLISH VERSION -->
+    <section id="pane-en" class="lang-pane" lang="en" dir="ltr">
+      <h2>1. Zero Telemetry &amp; Local Storage</h2>
+      <p>TrioBoard is built with a privacy-first architecture. The app does not collect hidden telemetry, keystroke analytics, usage tracking, or advertising identifiers, and never sells or sends your data to the developer.</p>
+      <ul>
+        <li>When installed from Microsoft Store (MSIX) or a protected system folder, settings, snippets, dictionary, clipboard history, user-supplied API keys, and downloaded models are stored strictly locally inside <code>%LOCALAPPDATA%\TrioBoard\data</code> and <code>%LOCALAPPDATA%\TrioBoard\models</code>.</li>
+        <li>In portable mode, user data is stored locally in the <code>data</code> folder next to the application.</li>
+      </ul>
+
+      <h2>2. Microphone &amp; Voice Dictation</h2>
+      <ul>
+        <li><strong>Local Whisper by default:</strong> Microphone audio is processed offline on your PC and never leaves your device.</li>
+        <li><strong>Password &amp; privacy protection:</strong> Active-window context hints are automatically disabled in Privacy Mode and inside password fields or password managers.</li>
+        <li><strong>Optional Cloud AI:</strong> Only if you explicitly select "Gemini (API)", "Auto: Gemini → Whisper", or enable AI text cleanup with your own API key will audio or dictated text be sent directly to Google Gemini API.</li>
+      </ul>
+
+      <h2>3. Translation &amp; Text-to-Speech (TTS)</h2>
+      <ul>
+        <li>Local voices (Windows SAPI and optional external Piper CLI) and offline translation run entirely on your device.</li>
+        <li>If you choose an online engine (Google Translate, MyMemory, Microsoft Edge Neural TTS, Google Cloud, Gemini, or Grok), only the selected text is transmitted directly to that service upon your explicit request.</li>
+      </ul>
+
+      <h2>4. History, Privacy Mode &amp; Diagnostic Logs</h2>
+      <ul>
+        <li>Clipboard history is saved locally (50 recent items by default).</li>
+        <li>Enabling <strong>Privacy Mode</strong> stops saving new history entries and blocks online TTS playback.</li>
+        <li>Technical logs (<code>app.log</code>) stay on your PC; using "Copy Support Report" automatically masks any API keys or bearer tokens.</li>
+      </ul>
+
+      <h2>5. Licensing &amp; Store Purchases</h2>
+      <p>The 7-day Pro Trial and daily free counters are tracked locally with no user account required. In-app upgrades to TrioBoard Pro are processed securely by Microsoft Store under Microsoft's Privacy Statement. Offline promo keys (<code>TBPRO-...</code>) are verified locally with zero network requests.</p>
+
+      <h2>6. Data Removal &amp; Contact</h2>
+      <p>You can clear history inside TrioBoard anytime or delete <code>%LOCALAPPDATA%\TrioBoard</code>. Uninstalling the Microsoft Store package removes app-managed storage via Windows.</p>
+      <div class="notice">
+        <strong>Developer Support Contact:</strong><br />
+        Privacy &amp; support inquiries: <a href="mailto:David.arieli91@gmail.com">David.arieli91@gmail.com</a>
+      </div>
+    </section>
+
+    <!-- HEBREW VERSION -->
+    <section id="pane-he" class="lang-pane" lang="he" dir="rtl">
+      <h2>1. אפס טלמטריה ושמירה מקומית במכשיר</h2>
+      <p>TrioBoard בנויה מתוך מחויבות מלאה לפרטיות. האפליקציה אינה אוספת סטטיסטיקות שימוש, אינה עוקבת אחר הקשות מקלדת ואינה שולחת מידע למפתחים או לגורמי פרסום.</p>
+      <ul>
+        <li>בהתקנה דרך Microsoft Store (MSIX), ההגדרות, מילון המונחים, קיצורי הטקסט, היסטוריית הלוח, מפתחות ה-API שהזנת והמודלים שהורדת נשמרים מקומית בלבד בתיקייה: <code>%LOCALAPPDATA%\TrioBoard</code>.</li>
+        <li>במצב נייד (Portable), הנתונים נשמרים מקומית בתיקיית <code>data</code> לצד הקבצים.</li>
+      </ul>
+
+      <h2>2. שימוש במיקרופון והכתבה קולית</h2>
+      <ul>
+        <li><strong>ברירת מחדל אופליין (Whisper):</strong> עיבוד הדיבור מתבצע מקומית על המחשב שלך בלבד ואינו נשלח לאינטרנט.</li>
+        <li><strong>הגנת סיסמאות:</strong> במצב פרטיות ובחלונות של מנהלי סיסמאות, קריאת ההקשר של החלון הפעיל מושבתת אוטומטית.</li>
+        <li><strong>מצבי ענן אופציונליים:</strong> רק אם בחרת בעצמך להשתמש ב-Gemini API או בעריכת AI והזנת מפתח אישי, האודיו או הטקסט נשלחים ישירות לשירות Google Gemini.</li>
+      </ul>
+
+      <h2>3. תרגום והקראת טקסט (TTS)</h2>
+      <ul>
+        <li>קולות המערכת של Windows, מנוע חיצוני אופציונלי Piper CLI ותרגום מקומי פועלים במלואם במחשב ללא חיבור רשת.</li>
+        <li>בבחירת מנועי רשת (Google Translate, MyMemory, Edge Neural TTS, Google Cloud, Gemini או Grok), רק הטקסט שביקשת לתרגם או להקריא נשלח ישירות לשירות הנבחר.</li>
+      </ul>
+
+      <h2>4. היסטוריה, מצב פרטיות ויומני מערכת</h2>
+      <ul>
+        <li>היסטוריית הלוח נשמרת מקומית בלבד. הפעלת <strong>מצב פרטיות</strong> עוצרת שמירה חדשה להיסטוריה וחוסמת הקראה מקוונת.</li>
+        <li>קובץ היומן (<code>app.log</code>) נשמר מקומית; בעת העתקת דוח תמיכה מפתחות API מוסתרים אוטומטית.</li>
+      </ul>
+
+      <h2>5. רישוי ורכישות</h2>
+      <p>תקופת הניסיון ל-7 ימים ומונה השימוש היומי בחינם מנוהלים מקומית ללא הרשמה. רכישת TrioBoard Pro מתבצעת דרך Microsoft Store בהתאם למדיניות הפרטיות של Microsoft.</p>
+
+      <h2>6. מחיקת נתונים ויצירת קשר</h2>
+      <p>ניתן למחוק את ההיסטוריה מתוך האפליקציה או להסיר את תיקיית <code>%LOCALAPPDATA%\TrioBoard</code> בכל עת.</p>
+      <div class="notice">
+        <strong>יצירת קשר ותמיכה:</strong><br />
+        לשאלות פרטיות ותמיכה: <a href="mailto:David.arieli91@gmail.com">David.arieli91@gmail.com</a>
+      </div>
+    </section>
+
+    <footer>
+      TrioBoard Desktop Application • Windows 10 / Windows 11 (x64)
+    </footer>
+  </div>
+
+  <script>
+    function setLang(lang) {
+      document.querySelectorAll('.lang-pane').forEach(function (el) {
+        el.classList.toggle('active', el.id === 'pane-' + lang);
+      });
+      document.querySelectorAll('.tab-btn').forEach(function (btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+      });
+      document.documentElement.lang = lang;
+    }
+  </script>
+</body>
+</html>
