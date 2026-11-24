@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrioBoard — EN / RU / HE On-Screen Keyboard &amp; Offline Whisper Dictation</title>
+  <style>
+    :root {
+      --bg: #0f1420;
+      --bg-grad: #141b2c;
+      --panel: #192234;
+      --card: #1d2740;
+      --border: #2a375a;
+      --text: #eef2f9;
+      --sub: #95a4c2;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --ok: #38c58c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 20% 0%, #1d2b4f 0%, var(--bg) 52%);
+      color: var(--text);
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      line-height: 1.55;
+    }
+    a { color: #7ab3ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 20px 64px;
+    }
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand-mini {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+    .brand-mini img {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+    }
+    .nav-right {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    .tabs {
+      display: flex;
+      gap: 6px;
+    }
+    .tab-btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .tab-btn:hover { background: #263455; }
+    .tab-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+    .lang-pane { display: none; }
+    .lang-pane.active { display: block; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 28px;
+      align-items: center;
+      padding: 36px 28px;
+      margin: 26px 0 32px;
+      background: linear-gradient(145deg, var(--panel), var(--bg-grad));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+    }
+    @media (max-width: 720px) {
+      .hero { grid-template-columns: 1fr; text-align: center; }
+      .hero-icon { margin: 0 auto; }
+      .badges, .cta-row { justify-content: center; }
+    }
+    .hero-icon {
+      width: 132px;
+      height: 132px;
+      border-radius: 26px;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+    }
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 2.1rem;
+      line-height: 1.2;
+    }
+    .hero p.lead {
+      margin: 0 0 16px;
+      color: #d6e0f5;
+      font-size: 1.08rem;
+    }
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .badge {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: #cbd7ef;
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 1px solid transparent;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .btn-primary:hover { background: var(--accent-hover); text-decoration: none; }
+    .btn-secondary {
+      background: var(--card);
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .btn-secondary:hover { background: #263455; text-decoration: none; }
+
+    h2.section-title {
+      margin: 36px 0 16px;
+      font-size: 1.45rem;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 1.07rem;
+      color: #ffffff;
+    }
+    .card p {
+      margin: 0;
+      color: var(--sub);
+      font-size: 0.94rem;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 16px;
+    }
+    .shot {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .shot:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+    .shot img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: #0b0e17;
+    }
+    .shot figcaption {
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      color: #d6e0f5;
+    }
+
+    .pricing {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .tier {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+    }
+    .tier.featured {
+      border-color: var(--accent);
+      background: linear-gradient(160deg, #1b2847, var(--panel));
+    }
+    .tier .tag {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--ok);
+      margin-bottom: 6px;
+    }
+    .tier h3 { margin: 0 0 8px; font-size: 1.2rem; }
+    .tier ul {
+      margin: 12px 0 0;
+      padding-inline-start: 18px;
+      color: #cbd7ef;
+      font-size: 0.92rem;
+    }
+    .tier li { margin-bottom: 6px; }
+
+    footer {
+      margin-top: 44px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--sub);
+      font-size: 0.9rem;
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 11, 18, 0.9);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 96vw;
+      max-height: 90vh;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div class="brand-mini">
+        <img src="assets/icon.png" alt="TrioBoard icon" />
+        <span>TrioBoard 1.8</span>
+      </div>
+      <div class="nav-right">
+        <a href="privacy.html">Privacy Policy</a>
+        <div class="tabs" role="tablist">
+          <button class="tab-btn" data-lang="en" onclick="setLang('en')">English</button>
+          <button class="tab-btn" data-lang="ru" onclick="setLang('ru')">Русский</button>
+          <button class="tab-btn" data-lang="he" onclick="setLang('he')">עברית</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENGLISH -->
+    <main id="pane-en" class="lang-pane" lang="en" dir="ltr">
+      <section class="hero">
+        <img class="hero-icon" src="assets/icon.png" alt="TrioBoard logo" />
+        <div>
+          <h1>TrioBoard</h1>
+          <p class="lead">Multilingual EN / RU / HE on-screen keyboard with offline Whisper voice dictation, real-time live preview, instant translation, and text-to-speech for Windows 10 &amp; 11.</p>
+          <div class="badges">
+            <span class="badge">Windows 10 / 11 (x64)</span>
+            <span class="badge">EN • RU • עברית (RTL)</span>
+            <span class="badge">Offline Whisper AI</span>
+            <span class="badge">No Subscription</span>
+          </div>
+          <div class="cta-row">
+            <span class="btn btn-primary">Microsoft Store — Coming Soon</span>
+            <a class="btn btn-secondary" href="privacy.html">Privacy Policy</a>
+            <a class="btn btn-secondary" href="mailto:David.arieli91@gmail.com">Contact Support</a>
+          </div>
+        </div>
+      </section>
+
+      <h2 class="section-title">Key Capabilities</h2>
+      <div class="grid-3">
+        <article class="card">
+          <h3>EN / RU / HE On-Screen Keyboard</h3>
+          <p>Switch cleanly between English, Russian, and Hebrew (with full RTL support) in Full or Compact mode, plus autotext snippets and custom glossary.</p>
+        </article>
+        <article class="card">
+          <h3>Offline Whisper Voice Dictation</h3>
+          <p>Your speech is processed locally on your PC using faster-whisper with automatic punctuation, self-correction cleanup, and floating mic widget.</p>
+        </article>
+        <article class="card">
+          <h3>Real-Time Live Preview (Pro)</h3>
+          <p>See live text as you speak with Whisper tiny, followed 1–2 seconds later by the refined final output from a larger accuracy model.</p>
+        </article>
+        <article class="card">
+          <h3>Instant Screen Translation</h3>
+          <p>Select any text or copy to clipboard to translate between EN, RU, and HE in one click — with built-in engines or optional Gemini / Grok / Google Cloud keys.</p>
+        </article>
+        <article class="card">
+          <h3>Natural Text-to-Speech (TTS)</h3>
+          <p>Read selected text aloud using Windows voices, Microsoft Edge Neural TTS, optional external Piper CLI offline voices, or Gemini TTS.</p>
+        </article>
+        <article class="card">
+          <h3>Glass UI &amp; Strict Privacy Mode</h3>
+          <p>Contrast-preserving transparency, DWM Matte Glass (Acrylic) with 12 themes, zero hidden telemetry, and one-click Privacy Mode.</p>
+        </article>
+      </div>
+
+      <h2 class="section-title">Screenshots</h2>
+      <div class="gallery">
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_01_keyboard.png" alt="EN RU HE on-screen keyboard with Acrylic matte glass" />
+          <figcaption>1. EN / RU / HE On-Screen Keyboard with Matte Glass</figcaption>
+        </figure>
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_02_dictation.png" alt="Offline Whisper dictation and live preview" />
+          <figcaption>2. Floating Mic Widget &amp; Whisper Live Preview</figcaption>
+        </figure>
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_03_translation.png" alt="Instant translation popup" />
+          <figcaption>3. Instant Multilingual Translation &amp; Hebrew Layout</figcaption>
+        </figure>
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_04_tts.png" alt="Text-to-speech settings" />
+          <figcaption>4. Voice Reading &amp; TTS Engine Settings</figcaption>
+        </figure>
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_05_components.png" alt="Component and model manager" />
+          <figcaption>5. On-Demand Components &amp; Models Manager</figcaption>
+        </figure>
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_06_license.png" alt="Transparent hybrid licensing" />
+          <figcaption>6. Honest Hybrid License: Trial, Free (12/day), One-Time Pro</figcaption>
+        </figure>
+      </div>
+
+      <h2 class="section-title">Simple, Honest Licensing</h2>
+      <div class="pricing">
+        <div class="tier">
+          <div class="tag">First 7 Days</div>
+          <h3>Pro Trial</h3>
+          <p>Automatic on first launch. No account or credit card needed.</p>
+          <ul>
+            <li>100% of TrioBoard Pro features unlocked</li>
+            <li>Unlimited dictation, translation, and TTS</li>
+            <li>All 12 themes &amp; Matte Glass (Acrylic)</li>
+          </ul>
+        </div>
+        <div class="tier">
+          <div class="tag">Forever Free</div>
+          <h3>Free Mode</h3>
+          <p>Keeps working forever after the 7-day trial ends.</p>
+          <ul>
+            <li>Unlimited EN/RU/HE keyboard, history, autotext &amp; dictionary</li>
+            <li>Floating mic widget &amp; regular transparency</li>
+            <li>12 dictations + 12 translations + 12 TTS readings per day</li>
+          </ul>
+        </div>
+        <div class="tier featured">
+          <div class="tag">One-Time Unlock</div>
+          <h3>TrioBoard Pro</h3>
+          <p>Pay once in Microsoft Store — zero monthly fees.</p>
+          <ul>
+            <li>Unlimited daily dictation, translation &amp; TTS</li>
+            <li>Whisper tiny live preview &amp; Cloud AI modes</li>
+            <li>DWM Matte Glass (Acrylic) &amp; all 12 themes</li>
+          </ul>
+        </div>
+      </div>
+    </main>
+
+    <!-- РУССКИЙ -->
+    <main id="pane-ru" class="lang-pane" lang="ru" dir="ltr">
+      <section class="hero">
+        <img class="hero-icon" src="assets/icon.png" alt="Логотип TrioBoard" />
+        <div>
+          <h1>TrioBoard</h1>
+          <p class="lead">Многоязычная экранная клавиатура EN / RU / HE с оффлайн-диктовкой Whisper, живым предпросмотром речи, мгновенным переводом и озвучкой текста для Windows 10 и 11.</p>
+          <div class="badges">
+            <span class="badge">Windows 10 / 11 (x64)</span>
+            <span class="badge">EN • RU • עברית (RTL)</span>
+            <span class="badge">Локальный Whisper</span>
+            <span class="badge">Без подписки</span>
+          </div>
+          <div class="cta-row">
+            <span class="btn btn-primary">Microsoft Store — скоро выход</span>
+            <a class="btn btn-secondary" href="privacy.html">Политика конфиденциальности</a>
+            <a class="btn btn-secondary" href="mailto:David.arieli91@gmail.com">Связаться с поддержкой</a>
+          </div>
+        </div>
+      </section>
+
+      <h2 class="section-title">Основные возможности</h2>
+      <div class="grid-3">
+        <article class="card">
+          <h3>Экранная клавиатура EN / RU / HE</h3>
+          <p>Мгновенное переключение между английским, русским и ивритом (с поддержкой RTL) в полном и компактном режимах, автотекст и собственный словарь.</p>
+        </article>
+        <article class="card">
+          <h3>Оффлайн-диктовка Whisper</h3>
+          <p>Распознавание речи работает полностью на вашем ПК на базе faster-whisper: без отправки голоса в интернет, с умной пунктуацией и автоисправлением.</p>
+        </article>
+        <article class="card">
+          <h3>Живой предпросмотр (Pro)</h3>
+          <p>Текст появляется в реальном времени по мере речи на базе Whisper tiny, а через 1–2 секунды автоматически уточняется старшей моделью.</p>
+        </article>
+        <article class="card">
+          <h3>Мгновенный перевод с экрана</h3>
+          <p>Выделите текст или скопируйте в буфер — перевод между EN, RU и HE в одно нажатие через встроенные движки или ваши ключи Gemini / Grok / Google Cloud.</p>
+        </article>
+        <article class="card">
+          <h3>Чтение текста вслух (TTS)</h3>
+          <p>Озвучка текста системными голосами Windows SAPI, Microsoft Edge Neural TTS, внешним оффлайн-движком Piper CLI или Gemini TTS.</p>
+        </article>
+        <article class="card">
+          <h3>Стеклянный UI и Приватный режим</h3>
+          <p>Регулируемая прозрачность с сохранением контраста, матовое стекло DWM Acrylic, 12 тем оформления, Приватный режим и ноль телеметрии.</p>
+        </article>
+      </div>
+
+      <h2 class="section-title">Скриншоты</h2>
+      <div class="gallery">
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_01_keyboard.png" alt="Экранная клавиатура EN RU HE с матовым стеклом" />
+          <figcaption>1. Клавиатура EN / RU / HE с матовым стеклом Acrylic</figcaption>
+        </figure>
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_02_dictation.png" alt="Голосовая диктовка и живой предпросмотр" />
+          <figcaption>2. Микро-виджет и живой предпросмотр Whisper tiny</figcaption>
+        </figure>
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_03_translation.png" alt="Окно мгновенного перевода и иврит" />
+          <figcaption>3. Мгновенный перевод и раскладка иврита</figcaption>
+        </figure>
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_04_tts.png" alt="Настройки озвучки текста" />
+          <figcaption>4. Чтение текста вслух и выбор голосов TTS</figcaption>
+        </figure>
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_05_components.png" alt="Менеджер компонентов и моделей" />
+          <figcaption>5. Менеджер загрузки моделей и движков</figcaption>
+        </figure>
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_06_license.png" alt="Гибридное лицензирование" />
+          <figcaption>6. Прозрачная лицензия: 7 дней Trial, Free (12/день), Pro</figcaption>
+        </figure>
+      </div>
+
+      <h2 class="section-title">Честная гибридная лицензия</h2>
+      <div class="pricing">
+        <div class="tier">
+          <div class="tag">Первые 7 дней</div>
+          <h3>Trial Pro</h3>
+          <p>Включается автоматически без регистрации и банковской карты.</p>
+          <ul>
+            <li>Полный доступ ко всем возможностям Pro</li>
+            <li>Безлимитная диктовка, перевод и озвучка</li>
+            <li>Матовое стекло Acrylic и все 12 тем</li>
+          </ul>
+        </div>
+        <div class="tier">
+          <div class="tag">Бесплатно навсегда</div>
+          <h3>Free-версия</h3>
+          <p>Работает бессрочно после окончания 7-дневного пробного периода.</p>
+          <ul>
+            <li>Безлимитная клавиатура EN/RU/HE, автотекст, словарь и история</li>
+            <li>Микро-виджет, обычная прозрачность и 3 базовые темы</li>
+            <li>До 12 диктовок + 12 переводов + 12 озвучек ежедневно</li>
+          </ul>
+        </div>
+        <div class="tier featured">
+          <div class="tag">Разовая покупка</div>
+          <h3>TrioBoard Pro</h3>
+          <p>Один платёж в Microsoft Store — никаких подписок.</p>
+          <ul>
+            <li>Безлимитная диктовка, перевод и чтение вслух</li>
+            <li>Живой предпросмотр Whisper tiny и облачный AI</li>
+            <li>Матовая прозрачность Acrylic и все 12 тем</li>
+          </ul>
+        </div>
+      </div>
+    </main>
+
+    <!-- עברית -->
+    <main id="pane-he" class="lang-pane" lang="he" dir="rtl">
+      <section class="hero">
+        <img class="hero-icon" src="assets/icon.png" alt="לוגו TrioBoard" />
+        <div>
+          <h1>TrioBoard</h1>
+          <p class="lead">מקלדת וירטואלית רב-לשונית לעברית, אנגלית ורוסית עם הכתבה קולית אופליין (Whisper), תצוגה מקדימה חיה, תרגום מיידי והקראת טקסט ל-Windows 10 ו-11.</p>
+          <div class="badges">
+            <span class="badge">Windows 10 / 11 (x64)</span>
+            <span class="badge">עברית • RU • EN</span>
+            <span class="badge">Whisper אופליין</span>
+            <span class="badge">ללא מנוי חודשי</span>
+          </div>
+          <div class="cta-row">
+            <span class="btn btn-primary">Microsoft Store — בקרוב</span>
+            <a class="btn btn-secondary" href="privacy.html">מדיניות פרטיות</a>
+            <a class="btn btn-secondary" href="mailto:David.arieli91@gmail.com">יצירת קשר</a>
+          </div>
+        </div>
+      </section>
+
+      <h2 class="section-title">יכולות מרכזיות</h2>
+      <div class="grid-3">
+        <article class="card">
+          <h3>מקלדת עברית / רוסית / אנגלית</h3>
+          <p>מעבר מהיר בין עברית (RTL), אנגלית ורוסית במצב מלא או קומפקטי, כולל Autotext ומילון מונחים אישי.</p>
+        </article>
+        <article class="card">
+          <h3>הכתבה קולית אופליין Whisper</h3>
+          <p>זיהוי הדיבור פועל מקומית על המחשב בלבד ללא ענן, עם פיסוק חכם ותיקון אוטומטי.</p>
+        </article>
+        <article class="card">
+          <h3>תצוגה מקדימה חיה (Pro)</h3>
+          <p>הטקסט מופיע בזמן אמת תוך כדי דיבור עם Whisper tiny ומשתפר אוטומטית תוך 1–2 שניות עם מודל מדויק יותר.</p>
+        </article>
+        <article class="card">
+          <h3>תרגום מיידי מהמסך</h3>
+          <p>סמנו טקסט או העתיקו ללוח לתרגום מהיר בין עברית, רוסית ואנגלית בקיצור מקש אחד.</p>
+        </article>
+        <article class="card">
+          <h3>הקראת טקסט טבעית (TTS)</h3>
+          <p>האזינו לטקסט בעזרת קולות Windows, Microsoft Edge Neural TTS, מנוע אופליין חיצוני Piper CLI או Gemini TTS.</p>
+        </article>
+        <article class="card">
+          <h3>זכוכית מט ופרטיות מלאה</h3>
+          <p>שקיפות נוחה לקריאה, זכוכית מט DWM Acrylic ב-12 ערכות נושא, אפס טלמטריה ומצב פרטיות בקליק אחד.</p>
+        </article>
+      </div>
+
+      <h2 class="section-title">צילומי מסך</h2>
+      <div class="gallery">
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_01_keyboard.png" alt="מקלדת וירטואלית עם זכוכית מט" />
+          <figcaption>1. מקלדת EN / RU / HE עם זכוכית מט Acrylic</figcaption>
+        </figure>
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_02_dictation.png" alt="הכתבה קולית ותצוגה מקדימה חיה" />
+          <figcaption>2. ווידג׳ט מיקרופון ותצוגה מקדימה חיה</figcaption>
+        </figure>
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_03_translation.png" alt="חלון תרגום מיידי ומקלדת עברית" />
+          <figcaption>3. תרגום מיידי ופריסת עברית</figcaption>
+        </figure>
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_04_tts.png" alt="הגדרות הקראת טקסט" />
+          <figcaption>4. הגדרות הקראת טקסט וקולות</figcaption>
+        </figure>
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_05_components.png" alt="מנהל רכיבים ומודלים" />
+          <figcaption>5. מנהל רכיבים ומודלים להורדה</figcaption>
+        </figure>
+        <figure class="shot" onclick="openShot(this)">
+          <img src="assets/screenshots/screenshot_06_license.png" alt="מודל רישוי הוגן" />
+          <figcaption>6. רישוי הוגן: 7 ימי ניסיון, חינם (12 ליום), Pro</figcaption>
+        </figure>
+      </div>
+
+      <h2 class="section-title">רישוי הוגן ללא מנוי</h2>
+      <div class="pricing">
+        <div class="tier">
+          <div class="tag">7 ימים ראשונים</div>
+          <h3>תקופת ניסיון Pro</h3>
+          <p>מתחילה אוטומטית בהפעלה הראשונה ללא צורך בהרשמה או כרטיס אשראי.</p>
+          <ul>
+            <li>כל יכולות TrioBoard Pro פתוחות במלואן</li>
+            <li>הכתבה, תרגום והקראה ללא הגבלה</li>
+            <li>זכוכית מט Acrylic וכל 12 ערכות הנושא</li>
+          </ul>
+        </div>
+        <div class="tier">
+          <div class="tag">חינם לתמיד</div>
+          <h3>גרסה חינמית</h3>
+          <p>ממשיכה לפעול לתמיד גם לאחר 7 ימי הניסיון.</p>
+          <ul>
+            <li>מקלדת עברית/רוסית/אנגלית, היסטוריה ומילון ללא הגבלה</li>
+            <li>ווידג׳ט מיקרופון, שקיפות רגילה ו-3 ערכות נושא</li>
+            <li>עד 12 הכתבות + 12 תרגומים + 12 הקראות בכל יום</li>
+          </ul>
+        </div>
+        <div class="tier featured">
+          <div class="tag">רכישה חד-פעמית</div>
+          <h3>TrioBoard Pro</h3>
+          <p>תשלום אחד ב-Microsoft Store ללא חיוב חודשי.</p>
+          <ul>
+            <li>שימוש יומי ללא הגבלה בהכתבה, תרגום והקראה</li>
+            <li>תצוגה מקדימה חיה Whisper tiny ומצבי AI בענן</li>
+            <li>זכוכית מט Acrylic וכל 12 ערכות הנושא</li>
+          </ul>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <span>© 2026 TrioBoard • Support: <a href="mailto:David.arieli91@gmail.com">David.arieli91@gmail.com</a></span>
+      <span><a href="privacy.html">Privacy Policy / Политика конфиденциальности / מדיניות פרטיות</a></span>
+    </footer>
+  </div>
+
+  <div id="lightbox" class="lightbox" onclick="this.classList.remove('open')">
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+  <script>
+    function setLang(lang) {
+      document.querySelectorAll('.lang-pane').forEach(function (el) {
+        el.classList.toggle('active', el.id === 'pane-' + lang);
+      });
+      document.querySelectorAll('.tab-btn').forEach(function (btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+      });
+      document.documentElement.lang = lang;
+    }
+
+    function openShot(fig) {
+      var img = fig.querySelector('img');
+      if (!img) return;
+      document.getElementById('lightbox-img').src = img.src;
+      document.getElementById('lightbox').classList.add('open');
+    }
+
+    (function initLang() {
+      var nav = (navigator.language || 'en').toLowerCase();
+      if (nav.indexOf('ru') === 0) setLang('ru');
+      else if (nav.indexOf('he') === 0 || nav.indexOf('iw') === 0) setLang('he');
+      else setLang('en');
+    })();
+  </script>
+</body>
+</html>
